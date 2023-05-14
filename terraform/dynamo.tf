@@ -1,15 +1,15 @@
-resource "aws_dynamodb_table" "dy_locks_table" {
-  name         = "app-tf-state-remote"
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "LockID"
+# resource "aws_dynamodb_table" "dy_locks_table" {
+#   name         = "app-tf-state-remote"
+#   billing_mode = "PAY_PER_REQUEST"
+#   hash_key     = "LockID"
 
-  attribute {
-    name = "LockID"
-    type = "S"
-  }
+#   attribute {
+#     name = "LockID"
+#     type = "S"
+#   }
 
-  tags = local.common_tags
-}
+#   tags = local.common_tags
+# }
 
 resource "aws_dynamodb_table" "dy_app_table" {
   hash_key       = "AppId"

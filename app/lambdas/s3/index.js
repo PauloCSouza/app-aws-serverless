@@ -1,7 +1,7 @@
 "use strict";
 
 const AWS = require("aws-sdk");
-const Jois = require("joi");
+const Joi = require("joi");
 
 const S3 = new AWS.S3();
 const SNS = new AWS.SNS();
@@ -34,7 +34,7 @@ const isItemValid = (data) => {
   return isValid.error === undefined;
 };
 
-publish = async (SNS, payload) => {
+const publish = async (SNS, payload) => {
   const { message, subject, topic } = payload;
   const params = {
     Message: message,
@@ -62,13 +62,13 @@ exports.handler = async (event) => {
     throw new Error("No topic defined.");
   }
 
-  const { S3 } = event.Records[0];
+  const { s3 } = event.Records[0];
   const content = await getFileContent(S3, s3.bucket.name, s3.object.key);
   let count = 0;
 
   for (let item of content) {
     if (!isItemValid(item)) {
-      console.log(`Ìnvalid item found: ${JSON.stringify(item)}`);
+      console.log(`Invalid item found: ${JSON.stringify(item)}`);
       return false;
     }
 
@@ -78,8 +78,8 @@ exports.handler = async (event) => {
       topic: topicArn,
     });
 
-    cont++;
+    count++;
   }
 
-  return `Published ${count} messages to the Topic`;
+  return `Published ${count} messages to the Topic.`;
 };
